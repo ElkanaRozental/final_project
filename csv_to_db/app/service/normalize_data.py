@@ -1,3 +1,6 @@
+from app.utils.normalize_utils import normalize_number
+
+
 def normalize_date(message):
     return {
         "year": message['iyear'],
@@ -16,10 +19,10 @@ def normalize_city(message):
 
 def normalize_event(message):
     return {
-        "kill_number": int(message['nkill']) if message['nkill'] else 0,
-        "wound_number": int(message['nwound']) if message['nwound'] else 0,
+        "kill_number": int(message['nkill']) if message['nkill'] else None,
+        "wound_number": int(message['nwound']) if message['nwound'] else None,
         "terror_group": message['gname'] if message['gname'] else "Unknown",
-        "killers_number": int(message['nkillter']) if message['nkillter'] else 0,
+        "killers_number": normalize_number(message['nperps']),
         "is_suicide": bool(int(message['suicide'])) if message['suicide'] else None,
     }
 
