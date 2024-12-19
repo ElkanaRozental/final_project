@@ -6,15 +6,16 @@ from app.service.read_file import read_csv, terror_data_path
 
 def read_and_insert_terror_data():
     terror_data = read_csv(terror_data_path)
-    batch_size = 200
-    batch = []
+    # batch_size = 200
+    # batch = []
     for terror in terror_data:
         terror = normalize_message(terror)
-        batch.append(terror)
-        if len(batch) == batch_size:
-            for x in batch:
-                insert_normalized_message(x, session=session_maker)
-            batch = []
-    if batch:
-        for x in batch:
-            insert_normalized_message(x, session=session_maker)
+        insert_normalized_message(terror, session=session_maker)
+        # batch.append(terror)
+    #     if len(batch) == batch_size:
+    #         for x in batch:
+    #             insert_normalized_message(x, session=session_maker)
+    #         batch = []
+    # if batch:
+    #     for x in batch:
+    #         insert_normalized_message(x, session=session_maker)

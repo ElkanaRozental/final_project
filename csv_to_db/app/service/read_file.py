@@ -1,10 +1,4 @@
 import csv
-import json
-import os
-
-from app.db.database import session_maker
-from app.repository.insert_repository import insert_normalized_message
-from app.service.normalize_data import normalize_message
 
 
 def read_csv(csv_path: str):

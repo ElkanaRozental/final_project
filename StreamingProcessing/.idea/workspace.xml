@@ -5,26 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b0e9f80-ac18-4d8f-9e3c-0e42d4cef33d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../csv_to_db/app/utils/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../csv_to_db/app/utils/normalize_utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/db/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/db/database.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/models/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/models/attack_type.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/models/city.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/models/country.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/models/date.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/models/event.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/models/province.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/models/region.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/models/target_type.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/repository/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/repository/statistics_repository.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/service/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/service/normalize_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/service/normalize_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/service/insert_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/service/insert_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/service/read_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/service/read_file.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../statistics/app/repository/statistics_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/../statistics/app/repository/statistics_repository.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
