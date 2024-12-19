@@ -19,8 +19,8 @@ def normalize_city(message):
 
 def normalize_event(message):
     return {
-        "kill_number": int(message['nkill']) if message['nkill'] else None,
-        "wound_number": int(message['nwound']) if message['nwound'] else None,
+        "kill_number": int(message['nkill']) if message['nkill'] else 0,
+        "wound_number": int(message['nwound']) if message['nwound'] else 0,
         "terror_group": message['gname'] if message['gname'] else "Unknown",
         "killers_number": normalize_number(message['nperps']),
         "is_suicide": bool(int(message['suicide'])) if message['suicide'] else None,

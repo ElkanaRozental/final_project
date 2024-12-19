@@ -1,5 +1,7 @@
 import csv
-
+import pandas as pd
+import toolz as t
+from itertools import chain
 
 def read_csv(csv_path: str):
     try:
@@ -13,4 +15,18 @@ def read_csv(csv_path: str):
         print(f"An error occurred: {e}")
 
 
-terror_data_path = "./data/globalterrorismdb_0718dist-1000 rows.csv"
+terror_data_path1 = "C:\\Users\\rozen\\Downloads\\globalterrorismdb_0718dist.csv"
+terror_data_path2 = "C:\\Users\\rozen\\Downloads\\RAND_Database_of_Worldwide_Terrorism_Incidents.csv"
+
+
+
+
+
+
+
+
+
+
+
+
+

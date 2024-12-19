@@ -5,10 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b0e9f80-ac18-4d8f-9e3c-0e42d4cef33d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../statistics/app/routs/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../statistics/app/routs/terror_data_routs.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../csv_to_db/app/service/insert_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/service/insert_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/service/normalize_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/service/normalize_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../csv_to_db/app/service/read_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/service/read_file.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../statistics/app/repository/statistics_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/../statistics/app/repository/statistics_repository.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../statistics/app/service/pandas_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/../statistics/app/service/pandas_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,18 +29,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "ElkanaRozental"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ElkanaRozental&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/ElkanaRozental/final_project.git",
-    "accountId": "b38b8595-52a1-4b0e-a1c3-4a6a4545c9c6"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ElkanaRozental/final_project.git&quot;,
+    &quot;accountId&quot;: &quot;b38b8595-52a1-4b0e-a1c3-4a6a4545c9c6&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
@@ -45,20 +49,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/rozen/PycharmProjects/final_test/StreamingProcessing",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/rozen/PycharmProjects/final_test/StreamingProcessing&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -77,6 +81,7 @@
       <updated>1734510704690</updated>
       <workItem from="1734510705775" duration="3072000" />
       <workItem from="1734515808101" duration="4106000" />
+      <workItem from="1734591766385" duration="1270000" />
     </task>
     <servers />
   </component>

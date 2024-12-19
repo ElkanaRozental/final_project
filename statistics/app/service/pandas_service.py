@@ -1,19 +1,18 @@
 import pandas as pd
 from pandas import DataFrame
-import toolz as t
-
+from toolz import *
 from app.db.database import session_maker
-from app.repository.statistics_repository import get_all_events
-
+from app.repository.statistics_repository import get_all_events, \
+    get_attack_type_target_type_correlation
 
 
 def convert_to_dataframe(data):
-    stream = t.pipe(
+    stream = pipe(
         data,
-        t.partial(
+        partial(
             map,
-            lambda event:
-            {key: value for key, value in event.items() if key != '_sa_instance_state'}
+            lambda model:
+            {key: value for key, value in model.items() if key != '_sa_instance_state'}
         ),
         list
     )
@@ -21,10 +20,11 @@ def convert_to_dataframe(data):
     return df
 
 
-
 def calculate_fatal_score(df: DataFrame, limit):
     df["fatal_score"] = (df["kill_number"].fillna(0) * 2) + (df["wound_number"].fillna(0) * 1)
     top_events = df.sort_values(by="fatal_score", ascending=False).head(limit)
     return top_events
 
-print(calculate_fatal_score(convert_to_dataframe(get_all_events(session=session_maker)), 5))
+
+
+
