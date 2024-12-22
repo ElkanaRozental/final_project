@@ -6,15 +6,14 @@ from sqlalchemy.orm import relationship
 class Event(Base):
     __tablename__ = 'events'
     id = Column(Integer, autoincrement=True, primary_key=True)
-    kill_number = Column(Integer)
-    wound_number = Column(Integer)
+    kill_number = Column(Float)
+    wound_number = Column(Float)
     terror_group = Column(String)
     killers_number = Column(Integer)
     is_suicide = Column(Boolean)
 
-    # Foreign Keys and Relationships
     date_id = Column(Integer, ForeignKey('dates.id'))
-    date = relationship('Date', back_populates="events")
+    date = relationship('TheDate', back_populates="events")
 
     city_id = Column(Integer, ForeignKey('cities.id'))
     city = relationship('City', back_populates='events')

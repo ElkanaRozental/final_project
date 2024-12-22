@@ -1,16 +1,14 @@
 from app.models import Base
-from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from sqlalchemy import Column, String, Integer, Date
 from sqlalchemy.orm import relationship
 
 
-class Date(Base):
+class TheDate(Base):
     __tablename__ = 'dates'
     id = Column(Integer, autoincrement=True, primary_key=True)
-    year = Column(Integer)
-    month = Column(Integer)
-    day = Column(Integer)
+    date = Column(Date)
 
     events = relationship('Event', back_populates='date')
 
     def __repr__(self):
-        return f"<Date(id={self.id}, date={self.year}-{self.month}-{self.day})>"
+        return f"<Date(id={self.id}, date={self.date})>"

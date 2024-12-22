@@ -1,9 +1,10 @@
 import pandas as pd
 from pandas import DataFrame
 from toolz import *
+import numpy as np
 from app.db.database import session_maker
-from app.repository.statistics_repository import get_all_events, \
-    get_attack_type_target_type_correlation
+from app.repository.statistics_repository import \
+     get_casualties_killers_correlation
 
 
 def convert_to_dataframe(data):
@@ -26,5 +27,20 @@ def calculate_fatal_score(df: DataFrame, limit):
     return top_events
 
 
+def calculate_correlation_from_results(result1, result2, key1, key2):
+    values1 = [row[key1] for row in result1]
+    values2 = [row[key2] for row in result2]
+
+    correlation = np.corrcoef(values1, values2)[0, 1]
+
+    return correlation
 
 
+def calculate_percentage_change_attacks_by_region(res):
+    df = pd.DataFrame(res, columns=["country", "city", "region", "date", "attack_count", "longitude", "latitude"])
+    df["percentage_change"] = (
+            df.groupby("region")["attack_count"]
+            .pct_change() * 100
+    )
+    df = df.dropna()
+    return df.to_dict(orient="records")

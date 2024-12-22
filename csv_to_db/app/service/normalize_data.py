@@ -1,11 +1,15 @@
+from datetime import date
+
 from app.utils.normalize_utils import normalize_number
 
 
 def normalize_date(message):
+    year = int(message.get('iyear', 0))
+    month = int(message["imonth"]) if int(message["imonth"]) > 0 else 1
+    day = int(message["iday"]) if int(message["iday"]) > 0 else 1
+    the_date = date(year,month,day)
     return {
-        "year": message['iyear'],
-        "month": message['imonth'],
-        "day": message['iday'],
+        "date": the_date
     }
 
 def normalize_city(message):
@@ -19,8 +23,8 @@ def normalize_city(message):
 
 def normalize_event(message):
     return {
-        "kill_number": int(message['nkill']) if message['nkill'] else 0,
-        "wound_number": int(message['nwound']) if message['nwound'] else 0,
+        "kill_number": float(message['nkill']) if message['nkill'] else 0,
+        "wound_number": float(message['nwound']) if message['nwound'] else 0,
         "terror_group": message['gname'] if message['gname'] else "Unknown",
         "killers_number": normalize_number(message['nperps']),
         "is_suicide": bool(int(message['suicide'])) if message['suicide'] else None,

@@ -1,56 +1,110 @@
-from typing import Callable
-from pydantic import BaseModel
-from sqlalchemy import desc, func
+import pandas as pd
 from sqlalchemy.orm import Session
-
+from typing import Callable
+from collections import Counter
+from sqlalchemy import func, case, desc
 from app.db.database import session_maker
-from app.models import Event, Country, AttackType, TargetType
+from app.models import City, Country, Region, Province, Event, AttackType, TargetType, TheDate
+from app.service.queries_service import check_filters_and_return_all, calculate_fatal_event_score, avg_calculator
+from toolz import *
 
-
-def calculate_fatal_event_score():
-    return (func.coalesce(Event.kill_number, 0) * 2 + func.coalesce(Event.wound_number, 0)).label("score")
 
 def get_most_fatal_attack_type(session, limit):
     with session() as session:
         query = (
             session.query(AttackType.attack_type).join(Event, Event.attack_type_id == AttackType.id)
             .add_columns(calculate_fatal_event_score())
-            .order_by(AttackType.attack_type,desc(calculate_fatal_event_score()))
+            .order_by(AttackType.attack_type, desc(calculate_fatal_event_score()))
         )
         if limit:
             query = query.limit(limit)
         result = query.all()
         result = [
-            {"attack_type": row[0], "fatal_score":row[1]}
+            {"attack_type": row[0], "fatal_score": row[1]}
             for row in result
         ]
         return result
 
-print(get_most_fatal_attack_type(session_maker, 5))
 
-def get_mean_fatal_event_for_country(session: Callable[[], Session], limit):
+def get_mean_fatal_event_for_area(
+        session: Callable[[], Session],
+        limit: int = None, country: Country = None,
+        province: Province = None,
+        region: Region = None,
+        city: City = None):
     with session() as session:
         try:
+            from app.models import Province
             results = (
                 session.query(
                     Country.country.label("country"),
-                    func.avg(calculate_fatal_event_score()).label("mean_score")
+                    Region.region.label("region"),
+                    City.city.label("city"),
+                    calculate_fatal_event_score(),
+                    City.latitude.label("latitude"),
+                    City.longitude.label("longitude")
                 )
                 .join(Country, Event.country_id == Country.id)
-                .group_by(Country.country)
-                .order_by(desc("mean_score"))
+                .join(Region, Event.region_id == Region.id)
+                .join(City, Event.city_id == City.id)
+                # .group_by(Country.country, Region.region, City.city, City.longitude, City.latitude, Event.wound_number, Event.kill_number)
+                .order_by(desc("score"))
             )
-            if limit:
-                query = results.limit(limit)
-            query = query.all()
+            query = check_filters_and_return_all(limit, country, province, region, city, result=results)
             mean_fatal = [
-                {"country": row.country, "fatal_avg": float(row.mean_score)}
-                for row in query
+                {
+                    "country": row.country,
+                    "region": row.region,
+                    "city": row.city,
+                    "fatal_avg": avg_calculator(query),
+                    "latitude": row.latitude,
+                    "longitude": row.longitude,
+                    "score": row.score
+                }
+                for row in query if row.longitude is not None and row.latitude is not None
             ]
             return mean_fatal
         except Exception as e:
             print(f"Error occurred while querying: {e}")
-            return []
+
+
+def get_most_common_terror_group_by_area(
+        session: Callable[[], Session],
+        limit: int = None, country: Country = None,
+        province: Province = None,
+        region: Region = None,
+        city: City = None):
+    with session() as session:
+        try:
+            results = (
+                session.query(
+                    Event.terror_group,
+                    Country.country,
+                    Region.region,
+                    City.city,
+                    City.latitude,
+                    City.longitude
+                )
+                .join(City, Event.city_id == City.id)
+                .join(Country, Event.country_id == Country.id)
+                .join(Region, Event.region_id == Region.id)
+                # .group_by(Event.terror_group, City.city, City.longitude, City.latitude)
+                .order_by(desc(Event.terror_group))
+                .distinct())
+
+            query = check_filters_and_return_all(limit, country, province, region, city, result=results)
+            mean_fatal = [
+                {
+                    "latitude": row.latitude,
+                    "longitude": row.longitude,
+                    "group": row.terror_group,
+                    "most_groups": [row.terror_group for row in query][:6],
+                }
+                for row in query if row.longitude is not None and row.latitude is not None
+            ]
+            return mean_fatal
+        except Exception as e:
+            print(f"Error occurred while querying: {e}")
 
 
 def get_top_terror_groups(session, limit):
@@ -79,7 +133,8 @@ def get_casualties_killers_correlation(session):
                 (func.coalesce(Event.kill_number, 0) + func.coalesce(Event.wound_number, 0)).label("casualties"),
                 Event.killers_number
             )
-            .group_by(Event.killers_number, (func.coalesce(Event.kill_number, 0) + func.coalesce(Event.wound_number, 0)))
+            .group_by(Event.killers_number,
+                      (func.coalesce(Event.kill_number, 0) + func.coalesce(Event.wound_number, 0)))
             .all()
         )
         correlation_data = [
@@ -88,30 +143,156 @@ def get_casualties_killers_correlation(session):
         ]
         return correlation_data
 
-def get_attack_type_target_type_correlation(session):
-    with session() as session:
-        correlation_data = (
+
+def get_event_percentage_change(session: Callable[[], Session],
+                                limit: int = None,
+                                country: Country = None,
+                                province: Province = None,
+                                region: Region = None,
+                                city: City = None):
+    with session_maker() as session:
+        results = (
             session.query(
-                AttackType.attack_type,
-                TargetType.target_type,
+                Country.country,
+                Region.region,
+                City.city,
+                TheDate.date,
+                func.count(Event.id).label("attack_count"),
+                City.longitude,
+                City.latitude
             )
-            .join(Event, Event.attack_type_id == AttackType.id)
-            .join(TargetType, Event.target_type_id == TargetType.id)
-            .group_by(AttackType.attack_type, TargetType.target_type)
-            .all()
+            .join(TheDate, Event.date_id == TheDate.id)
+            .join(City, Event.city_id == City.id)
+            .join(Country, Event.country_id == Country.id)
+            .join(Region, Event.region_id == Region.id)
+            .group_by(Country.country, City.city, Region.region, TheDate.date, City.longitude, City.latitude)
+            .order_by(Region.region, TheDate.date)
         )
-        return correlation_data
+        query = check_filters_and_return_all(limit, country, province, region, city, result=results)
+        return query
 
 
-# print(get_casualties_killers_correlation(session_maker))
-
-
-def get_all_events(session: Callable[[], Session]):
+def get_groups_with_same_target_by_area(session: Callable[[], Session],
+                                        limit: int = None, country: Country = None,
+                                        province: Province = None,
+                                        region: Region = None,
+                                        city: City = None):
     with session() as session:
-        events = (
-            session.query(Event)
-        ).all()
-        return [event.__dict__ for event in events]
+        results = (
+            session.query(
+                Event.terror_group,
+                Country.country,
+                Region.region,
+                City.city,
+                City.latitude,
+                City.longitude,
+                TargetType.target_type
+            )
+            .join(City, Event.city_id == City.id)
+            .join(Country, Event.country_id == Country.id)
+            .join(Region, Event.region_id == Region.id)
+            .join(TargetType, Event.target_type_id == TargetType.id)
+            # .group_by(
+            #     Event.terror_group,
+            #     TargetType.target_type,
+            #     Country.country,
+            #     Region.region,
+            #     City.city,
+            #     City.latitude,
+            #     City.longitude,
+            # )
+            .order_by(Event.terror_group)
+            .distinct()
+        )
+        query = check_filters_and_return_all(limit, country, province, region, city, result=results)
+
+        # def is_not_none(*args) -> bool:
+        #     return all(x is not None for x in args)
+
+        res = [
+            {
+                "target": row.target_type,
+                "longitude": row.longitude,
+                "latitude": row.latitude,
+                "groups": list(set([subrow.terror_group for subrow in query if subrow.target_type == row.target_type]))
+            }
+            for row in query if row.longitude is not None and row.latitude is not None
+        ]
+
+        return res
 
 
+print(get_groups_with_same_target_by_area(session_maker, limit=5))
 
+# def get_attack_type_target_type_correlation(session):
+#     with session() as session:
+#         result = (
+#             session.query(
+#                 AttackType.attack_type,
+#                 TargetType.target_type,
+#             )
+#             .join(Event, Event.attack_type_id == AttackType.id)
+#             .join(TargetType, Event.target_type_id == TargetType.id)
+#             .group_by(AttackType.attack_type, TargetType.target_type)
+#             .all()
+#         )
+#         correlation_data = [
+#             {"attack_type": row.attack_type, "target_type": row.target_type}
+#             for row in result
+#         ]
+#         return correlation_data
+
+# def get_event_percentage_change(session: Callable[[], Session],
+#             start_year,
+#             end_year,
+#             limit: int = None,
+#             country: Country = None,
+#             province: Province = None,
+#             region: Region = None,
+#             city: City = None,
+#         ):
+#     with session() as session:
+#         try:
+#             results = (
+#                 session.query(
+#                     Event,
+#                     Country.country,
+#                     Region.region,
+#                     TheDate.date,
+#                     City.longitude,
+#                     City.latitude,
+#                     City.city,
+#                 )
+#                 .join(TheDate, Event.date_id == TheDate.id)
+#                 .join(City, Event.city_id == City.id)
+#                 .join(Country, Event.country_id == Country.id)
+#                 .join(Region, Event.region_id == Region.id)
+#
+#             )
+#             query = check_filters_and_return_all(limit, country, province, region, city, result=results)
+#             start_year_counter = Counter([row.city for row in query if row.date.year == start_year])
+#             end_year_counter = Counter([row.city for row in query if row.date.year == end_year])
+#
+#             attacks_for_start_date = start_year_counter[city.city] if city else sum(start_year_counter.values())
+#             attacks_for_end_date = end_year_counter[city.city] if city else sum(end_year_counter.values())
+#
+#             percentage_change = (
+#                 0 if attacks_for_start_date == 0 else
+#                 (attacks_for_end_date - attacks_for_start_date) * 100.0 / attacks_for_start_date
+#             )
+#
+#             res = [
+#                 {
+#                     "city": row.city,
+#                     "longitude": row.longitude,
+#                     "latitude": row.latitude,
+#                     "attacks_for_start_date": start_year_counter[row.city],
+#                     "attacks_for_end_date": end_year_counter[row.city],
+#                     "percentage_change": percentage_change,
+#                 }
+#                 for row in query if row.longitude is not None and row.latitude is not None
+#             ]
+#             return res
+#         except Exception as e:
+#             print(f"Error occurred while querying: {e}")
+#             return []
