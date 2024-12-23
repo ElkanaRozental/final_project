@@ -1,25 +1,20 @@
 import pandas as pd
 from pandas import DataFrame
+from sqlalchemy.orm import Query
 from toolz import *
 import numpy as np
-from app.db.database import session_maker
-from app.repository.statistics_repository import \
-     get_casualties_killers_correlation
 
 
-def convert_to_dataframe(data):
-    stream = pipe(
-        data,
-        partial(
-            map,
-            lambda model:
-            {key: value for key, value in model.items() if key != '_sa_instance_state'}
-        ),
-        list
-    )
-    df = pd.DataFrame(stream)
-    return df
 
+def convert_to_dataframe(results):
+    column_names = [
+        "terror_group", "date", "country", "region", "city", "latitude", "longitude", "target_type"
+    ]
+    data = [
+        {column: value for column, value in zip(column_names, row)}
+        for row in results
+    ]
+    return DataFrame(data)
 
 def calculate_fatal_score(df: DataFrame, limit):
     df["fatal_score"] = (df["kill_number"].fillna(0) * 2) + (df["wound_number"].fillna(0) * 1)

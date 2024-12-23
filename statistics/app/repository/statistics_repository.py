@@ -1,8 +1,10 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session, query
 from typing import Callable
 from sqlalchemy import func, case, desc, distinct
 from app.db.database import session_maker
 from app.models import City, Country, Region, Province, Event, AttackType, TargetType, TheDate
+from app.service.pandas_service import convert_to_dataframe
 from app.service.queries_service import filter_and_return_all, calculate_fatal_event_score, avg_calculator
 from toolz import *
 
@@ -277,7 +279,91 @@ def get_top_locations_by_unique_groups(session: Callable[[], Session],
             for row in query if row.latitude is not None and row.longitude is not None
         ]
         return res
-print(get_top_locations_by_unique_groups(session_maker, limit=1000))
+
+def get_groups_in_the_same_attack(session: Callable[[], Session]):
+    with session() as session:
+        try:
+            results = (
+                session.query(
+                    Event.terror_group,
+                    Country.country,
+                    Region.region,
+                    City.city,
+                    City.latitude,
+                    City.longitude,
+                    TargetType.target_type
+                )
+                .join(City, Event.city_id == City.id)
+                .join(Country, Event.country_id == Country.id)
+                .join(Region, Event.region_id == Region.id)
+                .join(AttackType, Event.attack_type_id == AttackType.id)
+                .filter(Event.target_type_id == TargetType.id, Event.city_id == City.id, Event.country_id == Country.id)
+            ).all()
+            df = convert_to_dataframe(results)
+            grouped = df.groupby(
+                ["city", "country", "region", "latitude", "longitude", "target_type"]
+            )["terror_group"].apply(lambda groups: list(set(groups))).reset_index()
+            result = [
+                {
+                    "city": row["city"],
+                    "country": row["country"],
+                    "region": row["region"],
+                    "latitude": row["latitude"],
+                    "longitude": row["longitude"],
+                    "target": row["target_type"],
+                    "groups": row["terror_group"]
+                }
+                for index, row in grouped.iterrows()
+            ]
+            return result
+        except SQLAlchemyError as e:
+            print(str(e))
+
+def get_groups_in_the_same_year_target(session: Callable[[], Session]):
+    with session() as session:
+        try:
+            results = (
+                session.query(
+                    Event.terror_group,
+                    TheDate.date,
+                    Country.country,
+                    Region.region,
+                    City.city,
+                    City.latitude,
+                    City.longitude,
+                    TargetType.target_type
+                )
+                .join(City, Event.city_id == City.id)
+                .join(Country, Event.country_id == Country.id)
+                .join(Region, Event.region_id == Region.id)
+                .join(AttackType, Event.attack_type_id == AttackType.id)
+                .join(TheDate, Event.date_id == TheDate.id)
+                .filter(
+                    Event.target_type_id == TargetType.id,
+                    Event.city_id == City.id,
+                    Event.country_id == Country.id,
+                    TheDate.id == Event.date_id
+                )
+            ).all()
+            df = convert_to_dataframe(results)
+            import pandas as pd
+            df["year"] = pd.to_datetime(df["date"]).dt.year
+            grouped = df.groupby(
+                ["target_type", "year"]
+            )["terror_group"].apply(lambda groups: list(set(groups))).reset_index()
+            result = [
+                {
+                    "target": row["target_type"],
+                    "year": row["year"],
+                    "groups": row["terror_group"]
+                }
+                for index, row in grouped.iterrows()
+            ]
+            return result
+        except SQLAlchemyError as e:
+            print(str(e))
+
+print(get_groups_in_the_same_year_target(session_maker))
 # def get_attack_type_target_type_correlation(session):
 #     with session() as session:
 #         result = (

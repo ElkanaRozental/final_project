@@ -5,19 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b0e9f80-ac18-4d8f-9e3c-0e42d4cef33d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../statistics/app/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/service/maps_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/service/queries_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/static/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/db/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/db/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/models/event.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/models/event.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/service/normalize_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/service/normalize_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/service/read_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/service/read_file.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../statistics/app/repository/statistics_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/../statistics/app/repository/statistics_repository.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../statistics/app/routs/terror_data_routs.py" beforeDir="false" afterPath="$PROJECT_DIR$/../statistics/app/routs/terror_data_routs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../statistics/app/service/pandas_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/../statistics/app/service/pandas_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../statistics/app/service/maps_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/../statistics/app/service/maps_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../statistics/app/service/queries_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/../statistics/app/service/queries_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +80,7 @@
       <workItem from="1734591766385" duration="1872000" />
       <workItem from="1734815902746" duration="172000" />
       <workItem from="1734850569955" duration="690000" />
+      <workItem from="1734937572809" duration="207000" />
     </task>
     <servers />
   </component>
