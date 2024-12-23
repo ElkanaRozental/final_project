@@ -1,11 +1,9 @@
-import pandas as pd
 from sqlalchemy.orm import Session
 from typing import Callable
-from collections import Counter
-from sqlalchemy import func, case, desc
+from sqlalchemy import func, case, desc, distinct
 from app.db.database import session_maker
 from app.models import City, Country, Region, Province, Event, AttackType, TargetType, TheDate
-from app.service.queries_service import check_filters_and_return_all, calculate_fatal_event_score, avg_calculator
+from app.service.queries_service import filter_and_return_all, calculate_fatal_event_score, avg_calculator
 from toolz import *
 
 
@@ -50,7 +48,7 @@ def get_mean_fatal_event_for_area(
                 # .group_by(Country.country, Region.region, City.city, City.longitude, City.latitude, Event.wound_number, Event.kill_number)
                 .order_by(desc("score"))
             )
-            query = check_filters_and_return_all(limit, country, province, region, city, result=results)
+            query = filter_and_return_all(limit, country, province, region, city, result=results)
             mean_fatal = [
                 {
                     "country": row.country,
@@ -92,7 +90,7 @@ def get_most_common_terror_group_by_area(
                 .order_by(desc(Event.terror_group))
                 .distinct())
 
-            query = check_filters_and_return_all(limit, country, province, region, city, result=results)
+            query = filter_and_return_all(limit, country, province, region, city, result=results)
             mean_fatal = [
                 {
                     "latitude": row.latitude,
@@ -168,15 +166,15 @@ def get_event_percentage_change(session: Callable[[], Session],
             .group_by(Country.country, City.city, Region.region, TheDate.date, City.longitude, City.latitude)
             .order_by(Region.region, TheDate.date)
         )
-        query = check_filters_and_return_all(limit, country, province, region, city, result=results)
+        query = filter_and_return_all(limit, country, province, region, city, result=results)
         return query
 
 
 def get_groups_with_same_target_by_area(session: Callable[[], Session],
-                                        limit: int = None, country: Country = None,
-                                        province: Province = None,
-                                        region: Region = None,
-                                        city: City = None):
+        limit: int = None, country: Country = None,
+        province: Province = None,
+        region: Region = None,
+        city: City = None):
     with session() as session:
         results = (
             session.query(
@@ -192,19 +190,10 @@ def get_groups_with_same_target_by_area(session: Callable[[], Session],
             .join(Country, Event.country_id == Country.id)
             .join(Region, Event.region_id == Region.id)
             .join(TargetType, Event.target_type_id == TargetType.id)
-            # .group_by(
-            #     Event.terror_group,
-            #     TargetType.target_type,
-            #     Country.country,
-            #     Region.region,
-            #     City.city,
-            #     City.latitude,
-            #     City.longitude,
-            # )
             .order_by(Event.terror_group)
             .distinct()
         )
-        query = check_filters_and_return_all(limit, country, province, region, city, result=results)
+        query = filter_and_return_all(limit, country, province, region, city, result=results)
 
         # def is_not_none(*args) -> bool:
         #     return all(x is not None for x in args)
@@ -218,12 +207,77 @@ def get_groups_with_same_target_by_area(session: Callable[[], Session],
             }
             for row in query if row.longitude is not None and row.latitude is not None
         ]
+        return res
 
+def get_groups_with_same_attack_by_area(session: Callable[[], Session],
+        limit: int = None, country: Country = None,
+        province: Province = None,
+        region: Region = None,
+        city: City = None):
+    with session() as session:
+        results = (
+            session.query(
+                Event.terror_group,
+                Country.country,
+                Region.region,
+                City.city,
+                City.latitude,
+                City.longitude,
+                AttackType.attack_type
+            )
+            .join(City, Event.city_id == City.id)
+            .join(Country, Event.country_id == Country.id)
+            .join(Region, Event.region_id == Region.id)
+            .join(AttackType, Event.attack_type_id == AttackType.id)
+            .order_by(Event.terror_group)
+            .distinct()
+        )
+        query = filter_and_return_all(limit, country, province, region, city, result=results)
+        res = [
+            {
+                "attack": row.attack_type,
+                "longitude": row.longitude,
+                "latitude": row.latitude,
+                "groups": list(set([subrow.terror_group for subrow in query if subrow.target_type == row.target_type]))
+            }
+            for row in query if row.longitude is not None and row.latitude is not None
+        ]
         return res
 
 
-print(get_groups_with_same_target_by_area(session_maker, limit=5))
+def get_top_locations_by_unique_groups(session: Callable[[], Session],
+           limit: int = None,
+           country: Country = None,
+           province: Province = None,
+           region: Region = None,
+           city: City = None):
+    with session() as session:
+        results = (
+            session.query(
+                Event.terror_group,
+                City.city,
+                City.latitude,
+                City.longitude,
+            )
+            .join(City, Event.city_id == City.id)
+            .join(Country, Event.country_id == Country.id)
+            .join(Region, Event.region_id == Region.id)
+            .order_by(Event.terror_group)
+            .distinct()
+        )
+        query = filter_and_return_all(limit, country, province, region, city, result=results)
 
+        res = [
+            {
+                "city": row.city,
+                "latitude": row.latitude,
+                "longitude": row.longitude,
+                "groups": list(set([subrow.terror_group for subrow in query if subrow.city == row.city]))
+            }
+            for row in query if row.latitude is not None and row.longitude is not None
+        ]
+        return res
+print(get_top_locations_by_unique_groups(session_maker, limit=1000))
 # def get_attack_type_target_type_correlation(session):
 #     with session() as session:
 #         result = (

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Query
 from app.models import Country, Province, Region, City, Event
 
 
-def check_filters_and_return_all(
+def filter_and_return_all(
         limit: int, country: Country,
         province: Province,
         region: Region,
