@@ -240,7 +240,7 @@ def get_groups_with_same_attack_by_area(session: Callable[[], Session],
                 "attack": row.attack_type,
                 "longitude": row.longitude,
                 "latitude": row.latitude,
-                "groups": list(set([subrow.terror_group for subrow in query if subrow.target_type == row.target_type]))
+                "groups": list(set([subrow.terror_group for subrow in query if subrow.attack_type == row.attack_type]))
             }
             for row in query if row.longitude is not None and row.latitude is not None
         ]
@@ -363,7 +363,6 @@ def get_groups_in_the_same_year_target(session: Callable[[], Session]):
         except SQLAlchemyError as e:
             print(str(e))
 
-print(get_groups_in_the_same_year_target(session_maker))
 # def get_attack_type_target_type_correlation(session):
 #     with session() as session:
 #         result = (

@@ -1,5 +1,5 @@
 from app.models import Base
-from sqlalchemy import Column, String, Integer, Float, ForeignKey, Boolean
+from sqlalchemy import Column, String, Integer, Float, ForeignKey, Boolean, Text
 from sqlalchemy.orm import relationship
 
 
@@ -11,8 +11,8 @@ class Event(Base):
     terror_group = Column(String)
     killers_number = Column(Integer)
     is_suicide = Column(Boolean)
+    summary = Column(Text)
 
-    # Foreign Keys and Relationships
     date_id = Column(Integer, ForeignKey('dates.id'))
     date = relationship('TheDate', back_populates="events")
 

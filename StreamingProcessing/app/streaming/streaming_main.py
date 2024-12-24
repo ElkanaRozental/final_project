@@ -1,34 +1,30 @@
 import os
+import time
 
 import faust
 from dotenv import load_dotenv
+from app.service.send_to_groq_service import merge_response_with_message
 
-from app.service.normalize_data import normalize_message
-
-# Load environment variables
 load_dotenv(verbose=True)
 
-# Faust app for stream processing
 app = faust.App(
-    'terror_data_streaming',  # App name
-    broker="172.19.116.76:9092",  # Kafka broker
-    value_serializer='json'  # Message value format
+    'terror_data_streaming',
+    broker="172.19.116.76:9092",
+    value_serializer='json'
 )
 
-# Define a Kafka topic to consume_settings from
-terror_topic = app.topic('terror_data')
+news_topic = app.topic('fetch_news_topic')
 
-mongodb_topic = os.environ['MONGODB_TOPIC']
-postgresql_topic = os.environ['POSTGRESQL_TOPIC']
+elastic_topic = os.environ['ELASTIC_TOPIC']
 
-# Define an output Kafka topic to produce to
-processed_topic_for_mongoDB = app.topic(mongodb_topic)
-processed_topic_for_postgresQL = app.topic(postgresql_topic)
+processed_topic_for_elastic = app.topic(elastic_topic)
 
-
-async def process_psql(messages):
+@app.agent(news_topic)
+async def process_elastic(messages):
     async for message in messages:
-        normalize_data = normalize_message(message)
-
-        await processed_topic_for_postgresQL.send(value=normalize_data)
-        print(f"Processed and sent: {normalize_data}")
+        for sub in message["articles"]["results"]:
+            normalize_data = merge_response_with_message(sub)
+            if normalize_data:
+                await processed_topic_for_elastic.send(value=normalize_data)
+                print(f"Processed and sent: {normalize_data}")
+                time.sleep(5)

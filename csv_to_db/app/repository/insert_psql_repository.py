@@ -1,3 +1,5 @@
+from sqlalchemy.exc import SQLAlchemyError
+
 from app.models import TheDate, City, Country, TargetType, AttackType, Region, Event, Province
 # def insert_normalized_message(normalized_message, session):
 #     with session() as session:
@@ -78,45 +80,14 @@ from app.models import TheDate, City, Country, TargetType, AttackType, Region, E
 #             print(f"Error inserting message: {e}")
 
 
-def insert_normalized_message(normalized_message, session):
-    kill_number = float(normalized_message['event'].get('kill_number', 0))
-    wound_number = float(normalized_message['event'].get('wound_number', 0))
-    terror_group = normalized_message['event'].get('terror_group', '')
-    killers_number = int(normalized_message['event'].get('killers_number', 0))
-    is_suicide = bool(normalized_message['event'].get('is_suicide', False))
+
+
+
+def insert_psql(session, normalized_messages):
     with session() as session:
         try:
-            date = TheDate(date=normalized_message['date']['date'])
-            city = City(
-                city=normalized_message['city']['city'],
-                longitude=normalized_message['city']['longitude'],
-                latitude=normalized_message['city']['latitude'],
-            )
-            country = Country(country=normalized_message['country'])
-            region = Region(region=normalized_message['region'])
-            province = Province(province=normalized_message['province'])
-            target_type = TargetType(target_type=normalized_message['target_type'])
-            attack_type = AttackType(attack_type=normalized_message['attack_type'])
-
-            event = Event(
-                kill_number=kill_number,
-                wound_number=wound_number,
-                terror_group=terror_group,
-                killers_number=killers_number,
-                is_suicide=is_suicide,
-                date=date,
-                city=city,
-                country=country,
-                region=region,
-                province=province,
-                target_type=target_type,
-                attack_type=attack_type,
-            )
-
-            session.add(event)
+            session.bulk_save_objects(normalized_messages)
             session.commit()
-            print(f"Inserted event with ID: {event.id}")
-
-        except Exception as e:
+        except SQLAlchemyError as e:
             session.rollback()
-            print(f"Error inserting message: {e}")
+            print(f"Error inserting batch to database: {e}")

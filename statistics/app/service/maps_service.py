@@ -140,3 +140,17 @@ def map_for_max_unique_groups_by_area(res: list):
     main_map.save("static/max_unique_groups.html")
     return main_map
 
+def map_for_search_in_elastic(res: list):
+    main_map = folium.Map(location=[0, 0], zoom_start=2)
+    for loc in res:
+        folium.Marker(
+            location=[loc["latitude"], loc["longitude"]],
+            tooltip=(
+                loc["city"]
+            ),
+            popup=(f"country: {loc['country']},"
+                   f" city: {loc["city"]},"
+                   f" description: {loc['description']}"
+                   ),
+            icon=folium.Icon(color="blue"),
+        ).add_to(main_map)

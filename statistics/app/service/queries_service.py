@@ -28,3 +28,16 @@ def avg_calculator(res):
 
 def calculate_fatal_event_score():
     return (func.coalesce(Event.kill_number, 0) * 2 + func.coalesce(Event.wound_number, 0)).label("score")
+
+def normalize_elastic_response(res):
+    res = [
+        {
+            "country": row["_source"]["country"] if not None else None,
+            "city": row["_source"]["city"] if not None else None,
+            "longitude": row["_source"]["longitude"] if not None else None,
+            "latitude": row["_source"]["latitude"] if not None else None,
+            "description": row["_source"]["description"] if not None else None,
+        }
+        for row in res["hits"]["hits"]
+    ]
+    return res
