@@ -3,15 +3,15 @@ import webbrowser
 from flask import Blueprint, request, jsonify
 
 from app.db.database import session_maker
-from app.repository.elastic_statistics import search_multiple_indexes_fuzzy, search_news_fuzzy, search_historic_fuzzy, \
-    search_combined_with_date_fuzzy
+from app.repository.elastic_statistics import  search_news_fuzzy, search_historic_fuzzy, \
+    search_old_with_date_fuzzy, search_new_with_date_fuzzy
 from app.repository.statistics_repository import get_most_fatal_attack_type, get_mean_fatal_event_for_area, \
     get_most_common_terror_group_by_area, get_event_percentage_change, get_casualties_killers_correlation, \
     get_groups_with_same_target_by_area, get_groups_with_same_attack_by_area, get_top_locations_by_unique_groups, \
     get_groups_in_the_same_attack, get_groups_in_the_same_year_target
 from app.service.maps_service import map_for_get_mean_fatal_event_for_country, map_for_most_common_terror_group_by_area, \
     map_for_event_percentage_change, map_for_groups_to_one_target_by_area, map_for_max_unique_groups_by_area, \
-    map_for_groups_to_one_attack_by_area, map_for_search_in_elastic
+    map_for_groups_to_one_attack_by_area, map_for_search_in_elastic, map_for_search_in_elastic_combine
 from app.service.pandas_service import calculate_correlation_from_results, calculate_percentage_change_attacks_by_region
 
 terror_data_blueprint = Blueprint("t_data", __name__)
@@ -190,13 +190,17 @@ def unique_groups_for_area():
 def search_in_elastic():
     try:
         data = request.get_json()
-        res = search_multiple_indexes_fuzzy(
+        res1 = search_news_fuzzy(
             limit=data.get("limit"),
-            keyword=data.get("keyword"),
+            keyword=data.get("key_word"),
+        )
+        res2 = search_historic_fuzzy(
+            limit=data.get("limit"),
+            keyword=data.get("key_word"),
         )
         return jsonify({
-            "result": res,
-            "map": map_for_search_in_elastic(res)._repr_html_()
+            "result": [res1, res2],
+            "map": map_for_search_in_elastic_combine(res1, res2)._repr_html_()
         }), 200
     except Exception as e:
         print(str(e))
@@ -238,15 +242,21 @@ def search_in_elastic_historic():
 def search_in_elastic_by_dates():
     try:
         data = request.get_json()
-        res = search_combined_with_date_fuzzy(
+        res1 = search_old_with_date_fuzzy(
+            limit=data.get("limit"),
+            keyword=data.get("key_word"),
+            start_date=data.get("start_date"),
+            end_date=data.get("end_date"),
+        )
+        res2 = search_new_with_date_fuzzy(
             limit=data.get("limit"),
             keyword=data.get("key_word"),
             start_date=data.get("start_date"),
             end_date=data.get("end_date"),
         )
         return jsonify({
-            "result": res,
-            "map": map_for_search_in_elastic(res)._repr_html_()
+            "result": [res1, res2],
+            "map": map_for_search_in_elastic_combine(res1, res2)._repr_html_()
         }), 200
     except Exception as e:
         print(str(e))

@@ -155,3 +155,32 @@ def map_for_search_in_elastic(res: list):
             icon=folium.Icon(color="blue"),
         ).add_to(main_map)
     return main_map
+
+
+def map_for_search_in_elastic_combine(res1: list, res2: list):
+    main_map = folium.Map(location=[0, 0], zoom_start=2)
+    for loc in res1:
+        folium.Marker(
+            location=[loc["latitude"], loc["longitude"]],
+            tooltip=(
+                loc["city"]
+            ),
+            popup=(f"country: {loc['country']},"
+                   f" city: {loc["city"]},"
+                   f" description: {loc['description']}"
+                   ),
+            icon=folium.Icon(color="blue"),
+        ).add_to(main_map)
+    for loc in res2:
+        folium.Marker(
+            location=[loc["latitude"], loc["longitude"]],
+            tooltip=(
+                loc["city"]
+            ),
+            popup=(f"country: {loc['country']},"
+                   f" city: {loc["city"]},"
+                   f" description: {loc['description']}"
+                   ),
+            icon=folium.Icon(color="blue"),
+        ).add_to(main_map)
+    return main_map
