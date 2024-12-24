@@ -32,12 +32,14 @@ def calculate_fatal_event_score():
 def normalize_elastic_response(res):
     res = [
         {
-            "country": row["_source"]["country"] if not None else None,
-            "city": row["_source"]["city"] if not None else None,
-            "longitude": row["_source"]["longitude"] if not None else None,
-            "latitude": row["_source"]["latitude"] if not None else None,
-            "description": row["_source"]["description"] if not None else None,
+            "country": row["_source"].get("country", None),
+            "city": row["_source"].get("city", None),
+            "longitude": float(row["_source"]["longitude"]) if row["_source"].get("longitude") not in [None, ""] else None,
+            "latitude": float(row["_source"]["latitude"]) if row["_source"].get("latitude") not in [None, ""] else None,
+            "description": row["_source"].get("description", None),
         }
         for row in res["hits"]["hits"]
+        if row["_source"].get("longitude") not in [None, ""] and row["_source"].get("latitude") not in [None, ""]
     ]
+    print(res)
     return res

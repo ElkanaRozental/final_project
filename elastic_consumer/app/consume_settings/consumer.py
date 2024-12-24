@@ -17,7 +17,5 @@ def consume_topic(topic, process_message):
         for message in consumer:
             process_message(message.value)
             print(message)
-            # for data in message.value:
-            #     process_message(data)
     except Exception as e:
         print(str(e))

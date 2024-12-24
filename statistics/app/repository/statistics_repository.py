@@ -7,6 +7,8 @@ from app.models import City, Country, Region, Province, Event, AttackType, Targe
 from app.service.pandas_service import convert_to_dataframe
 from app.service.queries_service import filter_and_return_all, calculate_fatal_event_score, avg_calculator
 from toolz import *
+import pandas as pd
+from app.utils.repository_utils import is_not_none
 
 
 def get_most_fatal_attack_type(session, limit):
@@ -47,7 +49,6 @@ def get_mean_fatal_event_for_area(
                 .join(Country, Event.country_id == Country.id)
                 .join(Region, Event.region_id == Region.id)
                 .join(City, Event.city_id == City.id)
-                # .group_by(Country.country, Region.region, City.city, City.longitude, City.latitude, Event.wound_number, Event.kill_number)
                 .order_by(desc("score"))
             )
             query = filter_and_return_all(limit, country, province, region, city, result=results)
@@ -61,7 +62,7 @@ def get_mean_fatal_event_for_area(
                     "longitude": row.longitude,
                     "score": row.score
                 }
-                for row in query if row.longitude is not None and row.latitude is not None
+                for row in query if is_not_none(row.longitude, row.latitude)
             ]
             return mean_fatal
         except Exception as e:
@@ -88,7 +89,6 @@ def get_most_common_terror_group_by_area(
                 .join(City, Event.city_id == City.id)
                 .join(Country, Event.country_id == Country.id)
                 .join(Region, Event.region_id == Region.id)
-                # .group_by(Event.terror_group, City.city, City.longitude, City.latitude)
                 .order_by(desc(Event.terror_group))
                 .distinct())
 
@@ -100,7 +100,7 @@ def get_most_common_terror_group_by_area(
                     "group": row.terror_group,
                     "most_groups": [row.terror_group for row in query][:6],
                 }
-                for row in query if row.longitude is not None and row.latitude is not None
+                for row in query if is_not_none(row.longitude, row.latitude)
             ]
             return mean_fatal
         except Exception as e:
@@ -196,10 +196,6 @@ def get_groups_with_same_target_by_area(session: Callable[[], Session],
             .distinct()
         )
         query = filter_and_return_all(limit, country, province, region, city, result=results)
-
-        # def is_not_none(*args) -> bool:
-        #     return all(x is not None for x in args)
-
         res = [
             {
                 "target": row.target_type,
@@ -207,7 +203,7 @@ def get_groups_with_same_target_by_area(session: Callable[[], Session],
                 "latitude": row.latitude,
                 "groups": list(set([subrow.terror_group for subrow in query if subrow.target_type == row.target_type]))
             }
-            for row in query if row.longitude is not None and row.latitude is not None
+            for row in query if is_not_none(row.longitude, row.latitude)
         ]
         return res
 
@@ -242,7 +238,7 @@ def get_groups_with_same_attack_by_area(session: Callable[[], Session],
                 "latitude": row.latitude,
                 "groups": list(set([subrow.terror_group for subrow in query if subrow.attack_type == row.attack_type]))
             }
-            for row in query if row.longitude is not None and row.latitude is not None
+            for row in query if is_not_none(row.longitude, row.latitude)
         ]
         return res
 
@@ -276,7 +272,7 @@ def get_top_locations_by_unique_groups(session: Callable[[], Session],
                 "longitude": row.longitude,
                 "groups": list(set([subrow.terror_group for subrow in query if subrow.city == row.city]))
             }
-            for row in query if row.latitude is not None and row.longitude is not None
+            for row in query if is_not_none(row.longitude, row.latitude)
         ]
         return res
 
@@ -346,7 +342,6 @@ def get_groups_in_the_same_year_target(session: Callable[[], Session]):
                 )
             ).all()
             df = convert_to_dataframe(results)
-            import pandas as pd
             df["year"] = pd.to_datetime(df["date"]).dt.year
             grouped = df.groupby(
                 ["target_type", "year"]

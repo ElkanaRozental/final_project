@@ -28,6 +28,7 @@ def post_groq_api(article_content: dict) -> dict:
                     "    \"latitude\": \"int\",\n"
                     "}\n\n"
                     "If you cant find the city return the country longitude latitude instead"
+                    "If you cant find city or country return None instead"
                     "Respond with the JSON only, without any extra text."
                 ),
             }

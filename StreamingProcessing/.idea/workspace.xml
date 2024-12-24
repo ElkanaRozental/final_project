@@ -5,65 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b0e9f80-ac18-4d8f-9e3c-0e42d4cef33d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/api/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/api/groq_api.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/service/send_to_groq_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api/.idea/api.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api/app/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api/app/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api/app/api/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api/app/api/ai_api.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api/app/api/fetch_data.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api/app/kafka_settings/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api/app/kafka_settings/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api/app/kafka_settings/producer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api/app/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../csv_to_db/.idea/csv_to_db.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../csv_to_db/app/db/elastic_db.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../csv_to_db/app/repository/insert_elastic_repository.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/.idea/elastic_consumer.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/app/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/app/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/app/consume_settings/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/app/consume_settings/consumer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/app/db/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/app/db/elastic_connect.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/app/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/app/repository/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/app/repository/insert_repository.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/app/service/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../elastic_consumer/app/service/normalize_data.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../map_view/.idea/map_view.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../map_view/app/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../map_view/app/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../map_view/app/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../map_view/app/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/.idea/statistics.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/db/elastic_db.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../statistics/app/repository/elastic_statistics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/StreamingProcessing.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/StreamingProcessing.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../statistics/app/utils/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../statistics/app/utils/repository_utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/service/normalize_data.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/streaming/streaming_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/streaming/streaming_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/.env" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/db/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/db/psql_db.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/models/event.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/models/event.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/repository/insert_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/repository/insert_psql_repository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/service/insert_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/service/insert_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/service/normalize_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/service/normalize_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv_to_db/app/service/pandas_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/../csv_to_db/app/service/pandas_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../statistics/app/.env" beforeDir="false" afterPath="$PROJECT_DIR$/../statistics/app/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../statistics/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../statistics/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../statistics/app/models/event.py" beforeDir="false" afterPath="$PROJECT_DIR$/../statistics/app/models/event.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/.env" beforeDir="false" afterPath="$PROJECT_DIR$/app/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/groq_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/groq_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../elastic_consumer/app/consume_settings/consumer.py" beforeDir="false" afterPath="$PROJECT_DIR$/../elastic_consumer/app/consume_settings/consumer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../elastic_consumer/app/service/normalize_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/../elastic_consumer/app/service/normalize_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../map_view/app/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../map_view/app/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../map_view/app/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/../map_view/app/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../statistics/app/repository/elastic_statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/../statistics/app/repository/elastic_statistics.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../statistics/app/repository/statistics_repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/../statistics/app/repository/statistics_repository.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../statistics/app/routs/terror_data_routs.py" beforeDir="false" afterPath="$PROJECT_DIR$/../statistics/app/routs/terror_data_routs.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../statistics/app/service/maps_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/../statistics/app/service/maps_service.py" afterDir="false" />
@@ -174,7 +125,7 @@
       <workItem from="1734850569955" duration="690000" />
       <workItem from="1734937572809" duration="207000" />
       <workItem from="1734963205539" duration="4719000" />
-      <workItem from="1734968886679" duration="14366000" />
+      <workItem from="1734968886679" duration="17963000" />
     </task>
     <servers />
   </component>

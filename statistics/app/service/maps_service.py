@@ -154,3 +154,4 @@ def map_for_search_in_elastic(res: list):
                    ),
             icon=folium.Icon(color="blue"),
         ).add_to(main_map)
+    return main_map

@@ -208,7 +208,7 @@ def search_in_elastic_new():
         data = request.get_json()
         res = search_news_fuzzy(
             limit=data.get("limit"),
-            keyword=data.get("keyword"),
+            keyword=data.get("key_word"),
         )
         return jsonify({
             "result": res,
@@ -224,7 +224,7 @@ def search_in_elastic_historic():
         data = request.get_json()
         res = search_historic_fuzzy(
             limit=data.get("limit"),
-            keyword=data.get("keyword"),
+            keyword=data.get("key_word"),
         )
         return jsonify({
             "result": res,
@@ -240,7 +240,7 @@ def search_in_elastic_by_dates():
         data = request.get_json()
         res = search_combined_with_date_fuzzy(
             limit=data.get("limit"),
-            keyword=data.get("keyword"),
+            keyword=data.get("key_word"),
             start_date=data.get("start_date"),
             end_date=data.get("end_date"),
         )
